@@ -5,8 +5,7 @@ import { IllegalArgumentError } from './errors';
 
 const defaultOptions = {
   passReqToCallback: false,
-
-}
+};
 
 /**
  * Creates an instance of `ROPC Strategy`.
@@ -20,6 +19,9 @@ class Strategy extends PassportStrategy {
     if (typeof options === 'function') {
       this.verify = options;
       this.options = {};
+    }
+    else {
+      this.verify = verify;
     }
 
     const { tokenURL, clientID } = options;
