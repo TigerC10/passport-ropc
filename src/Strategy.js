@@ -8,7 +8,7 @@ const defaultOptions = {
 };
 
 /**
- * Creates an instance of `ROPC Strategy`.
+ * Creates an instance of `OAuth2RopcStrategy`.
  *
  * @class
  */
@@ -16,33 +16,35 @@ class Strategy extends PassportStrategy {
   constructor(options = defaultOptions, verify) {
     super();
 
-    if (typeof options === 'function') {
-      this.verify = options;
-      this.options = {};
-    }
-    else {
-      this.verify = verify;
-    }
+    this.verify = verify;
 
-    const { tokenURL, clientID } = options;
+    const {
+      accessTokenURL,
+      clientId,
+      clientSecret,
+      baseSite,
+      customHeaders,
+      passReqToCallback,
+    } = options;
 
-    if (!tokenURL) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a tokenURL option'); }
-    if (!clientID) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a clientID option'); }
-    // if (!clientSecret) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a clientSecret option'); }
+    if (!accessTokenURL) { throw new IllegalArgumentError('OAuth2ResourceOwnerStrategy requires a accessTokenURL option'); }
+    if (!clientId) { throw new IllegalArgumentError('OAuth2ResourceOwnerStrategy requires a clientId option'); }
 
-    // Check the preconditions
-    let constructorError = null;
     if (!this.verify) {
-      constructorError = constructorError || new IllegalArgumentError();
-      // constructorError.setIllegalArgument('verify', 'ROPC authentication strategy requires a verify function');
-      throw constructorError;
+      throw new IllegalArgumentError('ROPC authentication strategy requires a verify function');
     }
 
     this.name = 'oauth2-ropc';
-    this._passReqToCallback = options.passReqToCallback;
-    this._verify = verify;
+    this.passReqToCallback = passReqToCallback || false;
 
-    this._oauth2 = new OAuth2(clientID, null, '', tokenURL, null);
+    this.oauth2 = new OAuth2(
+      clientId,
+      clientSecret || null,
+      baseSite || '',
+      '',
+      accessTokenURL,
+      customHeaders || null,
+    );
   }
 
   /**
@@ -57,16 +59,9 @@ class Strategy extends PassportStrategy {
    */
   authenticate(req, options) {
     const { username, password } = req.body;
-    const { clientId } = options;
+    const self = this;
     if (!username || !password) {
-      return this.fail({ message: 'Missing credentials' }, 400);
-    }
-
-
-    if (this._passReqToCallback) {
-      this._verify(req, clientId, username, password, this.verified);
-    } else {
-      this._verify(clientId, username, password, this.verified);
+      return self.fail('Missing credentials', 400);
     }
 
     const params = {
@@ -75,46 +70,26 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
-    this._oauth2.getOAuthAccessToken('', params, function(err, accessToken, refreshToken, params) {
+    function verified(err, user, info = {}) {
+      if (err) { return self.error(err); }
+      if (!user) { return self.fail('User failed to authenticate', 404); }
+
+      self.success(user, info);
+    };
+
+    this.oauth2.getOAuthAccessToken('', params, function(err, accessToken, refreshToken, results) {
+
       if (err) {
-      //  new error
-        this.error(err);
+        self.error(err);
       }
 
-      if (this._passReqToCallback) {
-        this._verify(req, accessToken, refreshToken, params, this.verified);
+      if (self.passReqToCallback) {
+        self.verify(req, accessToken, refreshToken, results, verified);
       }
       else {
-        this._verify(accessToken, refreshToken, params, this.verified);
-
+        self.verify(accessToken, refreshToken, results, verified);
       }
-
     });
-
-  }
-
-  verified = (err, user, info) => {
-    if (err) { return this.error(err); }
-    if (!user) { return this.fail(info); }
-
-    this.success(user, info = {});
-  }
-
-  /**
-   *
-   * @param {*} req
-   * @param {*} callback
-   */
-  logout(req, callback) {
-
-  }
-
-  /**
-   *
-   * @param {string} decryptionCert
-   */
-  generateServiceProviderMetadata(decryptionCert) {
-
   }
 }
 
