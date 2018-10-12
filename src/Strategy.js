@@ -1,7 +1,7 @@
 import PassportStrategy from 'passport-strategy';
 import { OAuth2 } from 'oauth';
 
-import { IllegalArgumentError } from './errors';
+import IllegalArgumentError from './Errors';
 
 const defaultOptions = {
   passReqToCallback: false,
@@ -57,7 +57,8 @@ class Strategy extends PassportStrategy {
    * @param {Object} [options] Strategy-specific options.
    * @api public
    */
-  authenticate(req, options) {
+  // eslint-disable-next-line no-unused-vars
+  authenticate(req, options) { // eslint-disable-line consistent-return
     const { username, password } = req.body;
     const self = this;
     if (!username || !password) {
@@ -70,23 +71,22 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
+    // eslint-disable-next-line consistent-return
     function verified(err, user, info = {}) {
       if (err) { return self.error(err); }
       if (!user) { return self.fail('User failed to authenticate', 404); }
 
       self.success(user, info);
-    };
+    }
 
-    this.oauth2.getOAuthAccessToken('', params, function(err, accessToken, refreshToken, results) {
-
+    this.oauth2.getOAuthAccessToken('', params, (err, accessToken, refreshToken, results) => {
       if (err) {
         self.error(err);
       }
 
       if (self.passReqToCallback) {
         self.verify(req, accessToken, refreshToken, results, verified);
-      }
-      else {
+      } else {
         self.verify(accessToken, refreshToken, results, verified);
       }
     });

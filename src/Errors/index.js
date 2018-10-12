@@ -1,5 +1,3 @@
 import IllegalArgumentError from './IllegalArgumentError';
 
-export {
-  IllegalArgumentError,
-};
+export default IllegalArgumentError;

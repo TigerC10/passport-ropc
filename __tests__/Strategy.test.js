@@ -1,6 +1,7 @@
-import { OAuth2RopcStrategy } from '../src';
 import { OAuth2 } from 'oauth';
-import { IllegalArgumentError } from '../src/Errors'
+
+import { OAuth2RopcStrategy } from '../src';
+import IllegalArgumentError from '../src/Errors';
 
 jest.mock('oauth');
 
@@ -55,6 +56,7 @@ describe('passport-ropc constructor', () => {
     };
     const verify = () => {};
     try {
+      // eslint-disable-next-line no-unused-vars
       const ropcStrategy = new OAuth2RopcStrategy(options, verify);
       expect(false).toEqual(true);
     } catch (error) {
@@ -72,6 +74,7 @@ describe('passport-ropc constructor', () => {
     };
     const verify = () => {};
     try {
+      // eslint-disable-next-line no-unused-vars
       const ropcStrategy = new OAuth2RopcStrategy(options, verify);
       expect(false).toEqual(true);
     } catch (error) {
@@ -89,6 +92,7 @@ describe('passport-ropc constructor', () => {
       passReqToCallback: true,
     };
     try {
+      // eslint-disable-next-line no-unused-vars
       const ropcStrategy = new OAuth2RopcStrategy(options);
       expect(false).toEqual(true);
     } catch (error) {
@@ -105,9 +109,9 @@ describe('passport-ropc authenticate', () => {
       body: {
         username,
         password,
-      }
+      },
     };
-    const params = {
+    const testParams = {
       username,
       password,
       grant_type: 'password',
@@ -144,7 +148,7 @@ describe('passport-ropc authenticate', () => {
     const ropcStrategy = new OAuth2RopcStrategy(options, verify);
     ropcStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalledWith('', params, expect.any(Function));
+    expect(spy).toHaveBeenCalledWith('', testParams, expect.any(Function));
     spy.mockRestore();
   });
 });

@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.6",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -20,13 +21,17 @@
     "cookie-parser": "^1.4.3",
     "del": "^3.0.0",
     "eslint": "^5.1.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "express": "^4.16.3",
     "express-session": "^1.15.6",
     "gulp": "^4.0.0",
     "gulp-babel": "^7.0.1",
     "gulp-if": "^2.0.2",
     "gulp-uglify": "^3.0.1",
     "koa": "^2.5.2",
-    "express": "^4.16.3",
     "passport": "0.4.x"
   },
   "engines": {
