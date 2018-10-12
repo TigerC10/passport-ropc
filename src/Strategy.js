@@ -3,17 +3,13 @@ import { OAuth2 } from 'oauth';
 
 import IllegalArgumentError from './Errors';
 
-const defaultOptions = {
-  passReqToCallback: false,
-};
-
 /**
  * Creates an instance of `OAuth2RopcStrategy`.
  *
  * @class
  */
 class Strategy extends PassportStrategy {
-  constructor(options = defaultOptions, verify) {
+  constructor(options, verify) {
     super();
 
     this.verify = verify;
@@ -70,24 +66,23 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
-    // eslint-disable-next-line consistent-return
-    const verified = (err, user, info = {}) => {
-      if (err) { return this.error(err); }
-      if (!user) { return this.fail('User failed to authenticate', 404); }
-
-      this.success(user, info);
-    };
-
     this.oauth2.getOAuthAccessToken('', params, (err, accessToken, refreshToken, results) => {
       if (err) {
         this.error(err);
       }
 
-      if (this.passReqToCallback) {
-        this.verify(req, accessToken, refreshToken, results, verified);
-      } else {
-        this.verify(accessToken, refreshToken, results, verified);
-      }
+      // eslint-disable-next-line consistent-return
+      this.verify(accessToken, refreshToken, results, (e, user, info = {}) => {
+        if (e) {
+          return this.error(e);
+        }
+
+        if (!user) {
+          return this.fail('User failed to authenticate', 404);
+        }
+
+        this.success(user, info);
+      });
     });
   }
 }
