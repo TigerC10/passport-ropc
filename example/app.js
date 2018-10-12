@@ -25,9 +25,9 @@ app.use(passport.session());
 
 passport.use(new OAuth2RopcStrategy(
   {
-    // baseURL: 'http://test.com',
-    accessTokenURL: 'https://idmsupplier-q.cloud.sysco.com/mga/sps/oauth/oauth20/token',
-    clientId: 'oPQWZaXbHeFfCZu0Krcu',
+    baseURL: 'http://test.com',
+    accessTokenURL: '/token',
+    clientId: '123',
   },
   (accessToken, refreshToken, results, verified) => {
     verified(null, results);
