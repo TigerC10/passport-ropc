@@ -1,5 +1,13 @@
-lib/
-__tests__/coverage
+__mocks__/
+__tests__/
+example/
+src/
+.babelrc
+.eslintignore
+.eslintrc
+.gitignore
+gulpfile.babel.js
+jest.config.js
 
 ## Generated documentation
 docs/

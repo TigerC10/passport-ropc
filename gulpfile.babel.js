@@ -6,7 +6,7 @@ import del from 'del';
 
 function clean() {
   return del([
-    'dist',
+    'lib',
   ]);
 }
 

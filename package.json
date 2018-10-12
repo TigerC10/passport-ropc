@@ -1,8 +1,55 @@
 {
   "name": "passport-ropc",
   "version": "1.0.0",
+  "description": "Passport strategy for OAuth ROPC",
+  "keywords": [
+    "passport",
+    "strategy",
+    "oauth",
+    "ropc",
+    "password",
+    "grant"
+  ],
+  "homepage": "https://github.com/TigerC10/passport-ropc/wiki",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TigerC10/passport-ropc"
+  },
+  "bugs": {
+    "url": "https://github.com/TigerC10/passport-ropc/issues"
+  },
   "license": "MIT",
+  "author": {
+    "name": "Ian Cervantez",
+    "email": "TigerC10@gmail.com",
+    "url": "https://github.com/TigerC10"
+  },
+  "contributors": [
+    {
+      "name": "Ashley Toops",
+      "email": "ashleytoops@utexas.edu",
+      "url": "https://github.com/atoops"
+    },
+    {
+      "name": "Katherine Leedom",
+      "email": "katherine.leedom@gmail.com",
+      "url": "https://github.com/katleedom"
+    }
+  ],
+  "scripts": {
+    "build": "gulp",
+    "example": "node example/index.js",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm test",
+    "test": "eslint . && jest ./__tests__/"
+  },
   "main": "./lib/passport-ropc",
+  "files": [
+    "lib/",
+    ".npmignore",
+    "package.json",
+    "README.md"
+  ],
   "dependencies": {
     "debug": "^3.1.0",
     "lodash": "^4.17.11",
@@ -36,10 +83,5 @@
   },
   "engines": {
     "node": ">= 4"
-  },
-  "scripts": {
-    "build": "gulp",
-    "example": "node example/index.js",
-    "test": "eslint . && jest ./__tests__/"
   }
 }

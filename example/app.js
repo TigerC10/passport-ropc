@@ -29,8 +29,8 @@ passport.use(new OAuth2RopcStrategy(
     accessTokenURL: '/token',
     clientId: '123',
   },
-  (accessToken, refreshToken, results, verified) => {
-    verified(null, results);
+  (accessToken, refreshToken, results, done) => {
+    done(null, results);
   },
 ));
 
@@ -45,7 +45,16 @@ passport.deserializeUser((user, done) => {
 // Route to start a login with ROPC
 app.post(
   '/login',
-  passport.authenticate('oauth2-ropc', { failureRedirect: '/', failureFlash: true }),
+  passport.authenticate('oauth2-ropc', { failureRedirect: '/', failureFlash: true, grant_type: 'password' }),
+  (req, res) => {
+    res.send(req.user);
+  },
+);
+
+// Route to refresh a login with ROPC
+app.post(
+  '/refresh',
+  passport.authenticate('oauth2-ropc', { failureRedirect: '/', failureFlash: true, grant_type: 'refresh_token' }),
   (req, res) => {
     res.send(req.user);
   },
