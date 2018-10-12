@@ -70,14 +70,13 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
-    const self = this;
     // eslint-disable-next-line consistent-return
-    function verified(err, user, info = {}) {
-      if (err) { return self.error(err); }
-      if (!user) { return self.fail('User failed to authenticate', 404); }
+    const verified = (err, user, info = {}) => {
+      if (err) { return this.error(err); }
+      if (!user) { return this.fail('User failed to authenticate', 404); }
 
-      self.success(user, info);
-    }
+      this.success(user, info);
+    };
 
     this.oauth2.getOAuthAccessToken('', params, (err, accessToken, refreshToken, results) => {
       if (err) {
