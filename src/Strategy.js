@@ -1,48 +1,46 @@
 import PassportStrategy from 'passport-strategy';
 import { OAuth2 } from 'oauth';
 
-import { IllegalArgumentError } from './errors';
-
-const defaultOptions = {
-  passReqToCallback: false,
-};
+import IllegalArgumentError from './Errors';
 
 /**
- * Creates an instance of `ROPC Strategy`.
+ * Creates an instance of `OAuth2RopcStrategy`.
  *
  * @class
  */
 class Strategy extends PassportStrategy {
-  constructor(options = defaultOptions, verify) {
+  constructor(options, verify) {
     super();
 
-    if (typeof options === 'function') {
-      this.verify = options;
-      this.options = {};
-    }
-    else {
-      this.verify = verify;
-    }
+    this.verify = verify;
 
-    const { tokenURL, clientID } = options;
+    const {
+      accessTokenURL,
+      clientId,
+      clientSecret,
+      baseSite,
+      customHeaders,
+      passReqToCallback,
+    } = options;
 
-    if (!tokenURL) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a tokenURL option'); }
-    if (!clientID) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a clientID option'); }
-    // if (!clientSecret) { throw new TypeError('OAuth2ResourceOwnerStrategy requires a clientSecret option'); }
+    if (!accessTokenURL) { throw new IllegalArgumentError('OAuth2ResourceOwnerStrategy requires a accessTokenURL option'); }
+    if (!clientId) { throw new IllegalArgumentError('OAuth2ResourceOwnerStrategy requires a clientId option'); }
 
-    // Check the preconditions
-    let constructorError = null;
     if (!this.verify) {
-      constructorError = constructorError || new IllegalArgumentError();
-      // constructorError.setIllegalArgument('verify', 'ROPC authentication strategy requires a verify function');
-      throw constructorError;
+      throw new IllegalArgumentError('ROPC authentication strategy requires a verify function');
     }
 
     this.name = 'oauth2-ropc';
-    this._passReqToCallback = options.passReqToCallback;
-    this._verify = verify;
+    this.passReqToCallback = passReqToCallback || false;
 
-    this._oauth2 = new OAuth2(clientID, null, '', tokenURL, null);
+    this.oauth2 = new OAuth2(
+      clientId,
+      clientSecret || null,
+      baseSite || '',
+      '',
+      accessTokenURL,
+      customHeaders || null,
+    );
   }
 
   /**
@@ -55,18 +53,11 @@ class Strategy extends PassportStrategy {
    * @param {Object} [options] Strategy-specific options.
    * @api public
    */
-  authenticate(req, options) {
+  // eslint-disable-next-line no-unused-vars
+  authenticate(req, options) { // eslint-disable-line consistent-return
     const { username, password } = req.body;
-    const { clientId } = options;
     if (!username || !password) {
-      return this.fail({ message: 'Missing credentials' }, 400);
-    }
-
-
-    if (this._passReqToCallback) {
-      this._verify(req, clientId, username, password, this.verified);
-    } else {
-      this._verify(clientId, username, password, this.verified);
+      return this.fail('Missing credentials', 400);
     }
 
     const params = {
@@ -75,46 +66,24 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
-    this._oauth2.getOAuthAccessToken('', params, function(err, accessToken, refreshToken, params) {
+    this.oauth2.getOAuthAccessToken('', params, (err, accessToken, refreshToken, results) => {
       if (err) {
-      //  new error
         this.error(err);
       }
 
-      if (this._passReqToCallback) {
-        this._verify(req, accessToken, refreshToken, params, this.verified);
-      }
-      else {
-        this._verify(accessToken, refreshToken, params, this.verified);
+      // eslint-disable-next-line consistent-return
+      this.verify(accessToken, refreshToken, results, (e, user, info = {}) => {
+        if (e) {
+          return this.error(e);
+        }
 
-      }
+        if (!user) {
+          return this.fail('User failed to authenticate', 404);
+        }
 
+        this.success(user, info);
+      });
     });
-
-  }
-
-  verified = (err, user, info) => {
-    if (err) { return this.error(err); }
-    if (!user) { return this.fail(info); }
-
-    this.success(user, info = {});
-  }
-
-  /**
-   *
-   * @param {*} req
-   * @param {*} callback
-   */
-  logout(req, callback) {
-
-  }
-
-  /**
-   *
-   * @param {string} decryptionCert
-   */
-  generateServiceProviderMetadata(decryptionCert) {
-
   }
 }
 
