@@ -5,7 +5,6 @@
   "main": "./lib/passport-ropc",
   "dependencies": {
     "debug": "^3.1.0",
-    "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "oauth": "^0.9.15",
     "passport-strategy": "*"
@@ -31,6 +30,7 @@
     "gulp-babel": "^7.0.1",
     "gulp-if": "^2.0.2",
     "gulp-uglify": "^3.0.1",
+    "jest": "^23.6.0",
     "koa": "^2.5.2",
     "passport": "0.4.x"
   },

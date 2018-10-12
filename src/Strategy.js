@@ -60,9 +60,8 @@ class Strategy extends PassportStrategy {
   // eslint-disable-next-line no-unused-vars
   authenticate(req, options) { // eslint-disable-line consistent-return
     const { username, password } = req.body;
-    const self = this;
     if (!username || !password) {
-      return self.fail('Missing credentials', 400);
+      return this.fail('Missing credentials', 400);
     }
 
     const params = {
@@ -71,6 +70,7 @@ class Strategy extends PassportStrategy {
       grant_type: 'password',
     };
 
+    const self = this;
     // eslint-disable-next-line consistent-return
     function verified(err, user, info = {}) {
       if (err) { return self.error(err); }
@@ -81,13 +81,13 @@ class Strategy extends PassportStrategy {
 
     this.oauth2.getOAuthAccessToken('', params, (err, accessToken, refreshToken, results) => {
       if (err) {
-        self.error(err);
+        this.error(err);
       }
 
-      if (self.passReqToCallback) {
-        self.verify(req, accessToken, refreshToken, results, verified);
+      if (this.passReqToCallback) {
+        this.verify(req, accessToken, refreshToken, results, verified);
       } else {
-        self.verify(accessToken, refreshToken, results, verified);
+        this.verify(accessToken, refreshToken, results, verified);
       }
     });
   }
