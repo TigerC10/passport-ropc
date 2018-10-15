@@ -1,6 +1,6 @@
 {
   "name": "passport-ropc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Passport strategy for OAuth ROPC",
   "keywords": [
     "passport",
@@ -51,8 +51,6 @@
     "README.md"
   ],
   "dependencies": {
-    "debug": "^3.1.0",
-    "lodash": "^4.17.11",
     "oauth": "^0.9.15",
     "passport-strategy": "*"
   },
