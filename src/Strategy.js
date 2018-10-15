@@ -109,6 +109,9 @@ class Strategy extends PassportStrategy {
             return this.fail('User failed to authenticate', 404);
           }
 
+          // Add refreshToken to user
+          Object.assign(user, { refresh_token: refreshToken });
+
           return this.success(user, info);
         });
       });
