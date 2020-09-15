@@ -63,7 +63,7 @@
     "babel-register": "^6.26.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
-    "del": "^3.0.0",
+    "del": "^5.1.0",
     "eslint": "^5.1.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
