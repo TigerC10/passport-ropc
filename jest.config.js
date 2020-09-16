@@ -1,5 +1,5 @@
-require('babel-core');
-require('babel-polyfill');
+require('@babel/core');
+require('@babel/polyfill');
 
 module.exports = {
   testEnvironment: 'node',
