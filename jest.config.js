@@ -19,5 +19,6 @@ module.exports = {
       lines: 1,
     },
   },
+  testResultsProcessor: 'jest-sonar-reporter',
   verbose: true,
 };
