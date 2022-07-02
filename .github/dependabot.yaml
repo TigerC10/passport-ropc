@@ -9,3 +9,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+      include: scope
