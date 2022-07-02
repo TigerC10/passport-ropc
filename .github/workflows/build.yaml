@@ -72,18 +72,18 @@ jobs:
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
-        if: ${{ needs.vars.outputs.node-version == matrix.node-version && false }}
+        if: ${{ needs.vars.outputs.node-version == matrix.node-version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build Artifact
-        if: ${{ needs.vars.outputs.node-version == matrix.node-version && false }}
+        if: ${{ needs.vars.outputs.node-version == matrix.node-version }}
         run: npm pack
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
-        if: ${{ needs.vars.outputs-version == matrix.node-version && false }}
+        if: ${{ needs.vars.outputs-version == matrix.node-version }}
         with:
           name: package-tarball
           path: ${{ needs.vars.outputs.pkg-name }}-${{ needs.vars.outputs.pkg-version }}.tgz
