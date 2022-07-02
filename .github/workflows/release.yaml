@@ -26,6 +26,8 @@ jobs:
         with:
           release-type: node
           package-name: ${{ steps.vars.outputs.pkg-name }}
+          pull-request-title-pattern: "chore: release${component} ${version}"
+        
     outputs:
       node-version: ${{ steps.vars.outputs.node-version }}
       pkg-name: ${{ steps.vars.outputs.pkg-name }}
@@ -38,7 +40,7 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     with:
-        node-versions: "${{ needs.release-please.outputs.node-version }}"
+      node-versions: "${{ needs.release-please.outputs.node-version }}"
     secrets: inherit
 
   release:
