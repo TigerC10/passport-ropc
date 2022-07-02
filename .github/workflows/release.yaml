@@ -10,6 +10,9 @@ jobs:
     name: Release Please
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
       - name: Set job variables
         id: vars
         run: |
