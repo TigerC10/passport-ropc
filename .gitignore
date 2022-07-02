@@ -1,5 +1,6 @@
 lib/
 __tests__/coverage
+test-report.xml
 
 ## Generated documentation
 docs/

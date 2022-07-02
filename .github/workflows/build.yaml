@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      node-versions:
+        description: 'Node Version (for build)'
+        default: '10.x'
+        required: false
+        type: string
+
+    secrets:
+      SONAR_TOKEN:
+        description: 'SonarCloud Token'
+        required: false
+      # GITHUB_TOKEN:
+      #   description: 'GitHub Token'
+      #   required: false
+
+jobs:
+  vars:
+    name: Establish workflow variables
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Set job variables
+        id: vars
+        run: |
+          echo "::set-output name=node-version::$(cat .nvmrc)"
+          echo "::set-output name=pkg-name::$(npx -c 'echo $npm_package_name')"
+          echo "::set-output name=pkg-version::$(npx -c 'echo $npm_package_version')"
+    outputs:
+      node-version: ${{ steps.vars.outputs.node-version }}
+      pkg-name: ${{ steps.vars.outputs.pkg-name }}
+      pkg-version: ${{ steps.vars.outputs.pkg-version }}
+
+  build-nodejs:
+    name: Node.JS
+    needs: vars
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ${{ fromJson(inputs.node-versions) }}
+    continue-on-error: ${{ needs.vars.outputs.node-version != matrix.node-version }}
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+
+      - name: Setup Node.JS ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+        
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        # continue-on-error: ${{ needs.vars.outputs.node-version != matrix.node-version }}
+        run: npm run test --if-present
+
+      - name: Run Build
+        # continue-on-error: ${{ needs.vars.outputs.node-version != matrix.node-version }}
+        run: npm run build --if-present
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        if: ${{ needs.vars.outputs.node-version == matrix.node-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Build Artifact
+        if: ${{ needs.vars.outputs.node-version == matrix.node-version }}
+        run: npm pack
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        if: ${{ needs.vars.outputs-version == matrix.node-version }}
+        with:
+          name: package-tarball
+          path: ${{ needs.vars.outputs.pkg-name }}-${{ needs.vars.outputs.pkg-version }}.tgz
+          retention-days: 1
