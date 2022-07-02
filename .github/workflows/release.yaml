@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set job variables
+        id: vars
+        run: |
+          echo "::set-output name=node-version::$(cat .nvmrc)"
+          echo "::set-output name=pkg-name::$(npx -c 'echo $npm_package_name')"
+          echo "::set-output name=pkg-version::$(npx -c 'echo $npm_package_version')"
+
+      - name: Release Please
+        uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: node
+          package-name: ${{ steps.vars.outputs.pkg-name }}
+    outputs:
+      node-version: ${{ steps.vars.outputs.node-version }}
+      pkg-name: ${{ steps.vars.outputs.pkg-name }}
+      pkg-version: ${{ steps.vars.outputs.pkg-version }}
+      release_created: ${{ steps.release.outputs.release_created }}
+  
+  build:
+    name: Build Release
+    uses: ./.github/workflows/build.yaml
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    with:
+        node-versions: "${{ needs.release-please.outputs.node-version }}"
+    secrets: inherit
+
+  release:
+    name: Release
+    needs: build
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: package-tarball
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: https://registry.npmjs.org/
+
+      # - name: Publish 
+      #   if: ${{ needs.release-please.outputs.release_created }}
+      #   run: |
+      #     npm publish ${{ needs.release-please.outputs.pkg-name }}-${{ needs.release-please.outputs.pkg-version }}.tgz --ignore-scripts
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

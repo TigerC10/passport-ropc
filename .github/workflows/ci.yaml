@@ -1,0 +1,15 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yaml
+    with:
+        node-versions: >-
+          ["10.x", "12.x", "14.x", "16.x"]
+    secrets: inherit
