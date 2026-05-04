@@ -18,8 +18,8 @@ describe('passport-ropc constructor', () => {
     const verify = () => {};
     const ropcStrategy = new OAuth2RopcStrategy(options, verify);
     expect(ropcStrategy).toBeDefined();
-    expect(OAuth2).toBeCalled();
-    expect(OAuth2).toBeCalledWith(options.clientId, options.clientSecret, options.baseSite, '', options.accessTokenURL, options.customHeaders);
+    expect(OAuth2).toHaveBeenCalled();
+    expect(OAuth2).toHaveBeenCalledWith(options.clientId, options.clientSecret, options.baseSite, '', options.accessTokenURL, options.customHeaders);
     expect(ropcStrategy.verify).toBeDefined();
     expect(ropcStrategy.verify).toEqual(verify);
     expect(ropcStrategy.name).toBeDefined();
@@ -35,8 +35,8 @@ describe('passport-ropc constructor', () => {
     const verify = () => {};
     const ropcStrategy = new OAuth2RopcStrategy(options, verify);
     expect(ropcStrategy).toBeDefined();
-    expect(OAuth2).toBeCalled();
-    expect(OAuth2).toBeCalledWith(options.clientId, null, '', '', options.accessTokenURL, null);
+    expect(OAuth2).toHaveBeenCalled();
+    expect(OAuth2).toHaveBeenCalledWith(options.clientId, null, '', '', options.accessTokenURL, null);
     expect(ropcStrategy.verify).toBeDefined();
     expect(ropcStrategy.verify).toEqual(verify);
     expect(ropcStrategy.name).toBeDefined();
@@ -53,7 +53,7 @@ describe('passport-ropc constructor', () => {
     };
     const verify = () => {};
     try {
-      // eslint-disable-next-line no-unused-vars
+       
       const ropcStrategy = new OAuth2RopcStrategy(options, verify);
       expect(false).toEqual(true);
     } catch (error) {
@@ -70,7 +70,7 @@ describe('passport-ropc constructor', () => {
     };
     const verify = () => {};
     try {
-      // eslint-disable-next-line no-unused-vars
+       
       const ropcStrategy = new OAuth2RopcStrategy(options, verify);
       expect(false).toEqual(true);
     } catch (error) {
@@ -87,7 +87,7 @@ describe('passport-ropc constructor', () => {
       customHeaders: {},
     };
     try {
-      // eslint-disable-next-line no-unused-vars
+       
       const ropcStrategy = new OAuth2RopcStrategy(options);
       expect(false).toEqual(true);
     } catch (error) {
@@ -124,7 +124,7 @@ describe('passport-ropc authenticate', () => {
       access_token: expectedAccessToken,
     };
 
-    // eslint-disable-next-line no-unused-vars
+     
     const verify = (accessToken, refreshToken, results, verified) => {
       expect(accessToken).toBeDefined();
       expect(accessToken).toEqual(expectedAccessToken);
@@ -160,10 +160,10 @@ describe('passport-ropc authenticate', () => {
       customHeaders: {},
     };
 
-    // eslint-disable-next-line no-unused-vars
+     
     const verify = (accessToken, refreshToken, results, verified) => {};
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy = jest.spyOn(decoratedStrategy, 'fail').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -185,10 +185,10 @@ describe('passport-ropc authenticate', () => {
       customHeaders: {},
     };
 
-    // eslint-disable-next-line no-unused-vars
+     
     const verify = (accessToken, refreshToken, results, verified) => {};
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy = jest.spyOn(decoratedStrategy, 'fail').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -210,10 +210,10 @@ describe('passport-ropc authenticate', () => {
       customHeaders: {},
     };
 
-    // eslint-disable-next-line no-unused-vars
+     
     const verify = (accessToken, refreshToken, results, verified) => {};
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy = jest.spyOn(decoratedStrategy, 'fail').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, { grant_type: 'refresh_token' });
     expect(spy).toHaveBeenCalled();
@@ -242,14 +242,14 @@ describe('passport-ropc authenticate', () => {
       customHeaders: {},
     };
 
-    // eslint-disable-next-line no-unused-vars
+     
     const verify = (accessToken, refreshToken, results, verified) => {};
     const spy = jest.spyOn(OAuth2.prototype, 'getOAuthAccessToken').mockImplementation((code, params, callback) => {
       callback(new Error('getOAuthAccessToken Error'), null, null, null);
     });
 
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy2 = jest.spyOn(decoratedStrategy, 'error').mockImplementation((err) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -297,7 +297,7 @@ describe('passport-ropc authenticate', () => {
       callback(null, expectedAccessToken, expectedRefreshToken, expectedResults);
     });
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy2 = jest.spyOn(decoratedStrategy, 'error').mockImplementation((err) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -345,7 +345,7 @@ describe('passport-ropc authenticate', () => {
       callback(null, expectedAccessToken, expectedRefreshToken, expectedResults);
     });
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy2 = jest.spyOn(decoratedStrategy, 'fail').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -393,7 +393,7 @@ describe('passport-ropc authenticate', () => {
       callback(null, expectedAccessToken, expectedRefreshToken, expectedResults);
     });
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy2 = jest.spyOn(decoratedStrategy, 'success').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, null);
     expect(spy).toHaveBeenCalled();
@@ -438,12 +438,61 @@ describe('passport-ropc authenticate', () => {
       callback(null, expectedAccessToken, expectedRefreshToken, expectedResults);
     });
     const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
-    // eslint-disable-next-line no-unused-vars
+     
     const spy2 = jest.spyOn(decoratedStrategy, 'success').mockImplementation((challenge, status) => {});
     decoratedStrategy.authenticate(testReq, testParams);
     expect(spy).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith(code, testParams, expect.any(Function));
     expect(spy2).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalledWith('testUsername', {});
+    spy.mockRestore();
+    spy2.mockRestore();
+  });
+
+  it('should use default options when no options argument is provided', () => {
+    const username = 'testUsername';
+    const password = 'testPassword';
+    const testReq = { body: { username, password } };
+    const testParams = { username, password, grant_type: 'password' };
+    const options = {
+      accessTokenURL: '/token',
+      clientId: '123',
+      clientSecret: '123',
+      baseSite: 'www.test.com',
+      customHeaders: {},
+    };
+    const verify = () => {};
+    const spy = jest.spyOn(OAuth2.prototype, 'getOAuthAccessToken').mockImplementation(() => {});
+    const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
+    decoratedStrategy.authenticate(testReq);
+    expect(spy).toHaveBeenCalledWith('', testParams, expect.any(Function));
+    spy.mockRestore();
+  });
+
+  it('should succeed when verify calls back without info argument', () => {
+    const username = 'testUsername';
+    const password = 'testPassword';
+    const testReq = { body: { username, password } };
+    const options = {
+      accessTokenURL: '/token',
+      clientId: '123',
+      clientSecret: '123',
+      baseSite: 'www.test.com',
+      customHeaders: {},
+    };
+    const expectedAccessToken = 'accessToken';
+    const expectedRefreshToken = 'refreshToken';
+    const expectedResults = { access_token: expectedAccessToken };
+
+    const verify = (accessToken, refreshToken, results, verified) => {
+      verified(null, 'testUsername');
+    };
+    const spy = jest.spyOn(OAuth2.prototype, 'getOAuthAccessToken').mockImplementation((code, params, callback) => {
+      callback(null, expectedAccessToken, expectedRefreshToken, expectedResults);
+    });
+    const decoratedStrategy = passportStrategyDecorator(new OAuth2RopcStrategy(options, verify));
+    const spy2 = jest.spyOn(decoratedStrategy, 'success').mockImplementation(() => {});
+    decoratedStrategy.authenticate(testReq, null);
     expect(spy2).toHaveBeenCalledWith('testUsername', {});
     spy.mockRestore();
     spy2.mockRestore();

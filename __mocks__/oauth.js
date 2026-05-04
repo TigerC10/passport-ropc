@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 exports.OAuth2 = jest.fn((
   clientId,
   clientSecret,

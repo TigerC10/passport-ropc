@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
@@ -65,5 +64,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port);
-// eslint-disable-next-line no-console
+ 
 console.info(`Example listening on port ${port}`);
