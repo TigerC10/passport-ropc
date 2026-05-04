@@ -51,5 +51,4 @@ app.post(
     res.redirect('/');
   },
 );
-
 ```
