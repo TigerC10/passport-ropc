@@ -13,7 +13,7 @@ class IllegalArgumentError extends Error {
     let fullMessage = m;
 
     if (Object.keys(a).length > 0) {
-      const details = Object.keys(a).map(argKey => `Argument [${argKey}] ${a[argKey]}`).join('\n');
+      const details = Object.keys(a).map((argKey) => `Argument [${argKey}] ${a[argKey]}`).join('\n');
       fullMessage = `${m}:\n${details}`;
     }
 
@@ -35,9 +35,9 @@ class IllegalArgumentError extends Error {
   setArgumentValidation = (argumentName, message) => {
     const { msg, argumentMap } = this;
     argumentMap[argumentName] = message;
-    const details = Object.keys(argumentMap).map(argKey => `Argument [${argKey}] ${argumentMap[argKey]}`).join('\n');
+    const details = Object.keys(argumentMap).map((argKey) => `Argument [${argKey}] ${argumentMap[argKey]}`).join('\n');
     this.message = `${msg}:\n${details}`;
-  }
+  };
 }
 
 export default IllegalArgumentError;

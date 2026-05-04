@@ -1,6 +1,4 @@
 import Strategy from './Strategy';
 
-export {
-  Strategy as default,
-  Strategy as OAuth2RopcStrategy,
-};
+export default Strategy;
+export { Strategy as OAuth2RopcStrategy };

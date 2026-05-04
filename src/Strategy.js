@@ -94,7 +94,9 @@ class Strategy extends PassportStrategy {
       token = code;
     }
 
-    return this.oauth2.getOAuthAccessToken(token, params,
+    return this.oauth2.getOAuthAccessToken(
+      token,
+      params,
       (err, accessToken, refreshToken, results) => {
         if (err) {
           return this.error(err);
@@ -114,7 +116,8 @@ class Strategy extends PassportStrategy {
 
           return this.success(user, info);
         });
-      });
+      },
+    );
   }
 }
 
