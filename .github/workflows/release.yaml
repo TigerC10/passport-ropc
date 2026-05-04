@@ -45,7 +45,7 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     with:
-      node-versions: "${{ needs.release-please.outputs.node-version }}"
+      node-versions: '["${{ needs.release-please.outputs.node-version }}"]'
     secrets: inherit
 
   release:
