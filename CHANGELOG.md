@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/TigerC10/passport-ropc/compare/v1.2.1...v2.0.0) (2026-05-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* updating dependencies for security
+
+### Features
+
+* updating dependencies for security ([cee831a](https://github.com/TigerC10/passport-ropc/commit/cee831a2caf9313de83ac742f8dd51db1a1a1f7f))
+
 ## [1.2.1](https://github.com/TigerC10/passport-ropc/compare/v1.2.0...v1.2.1) (2026-05-04)
 
 
