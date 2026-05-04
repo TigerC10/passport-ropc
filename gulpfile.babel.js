@@ -2,10 +2,10 @@ import gulp from 'gulp';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import gulpif from 'gulp-if';
-import del from 'del';
+import { deleteAsync } from 'del';
 
 function clean() {
-  return del([
+  return deleteAsync([
     'lib',
   ]);
 }
