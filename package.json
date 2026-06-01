@@ -81,7 +81,7 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.29.3",
     "@babel/register": "^7.29.3",
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^10.0.1",
     "body-parser": "^2.2.2",
     "cookie-parser": "^1.4.7",
     "del": "^8.0.1",
